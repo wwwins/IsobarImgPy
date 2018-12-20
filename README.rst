@@ -1,2 +1,4 @@
-# IsobarImg
+IsobarImg
+===============
+
 isobar python image library

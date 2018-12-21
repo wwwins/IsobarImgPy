@@ -19,5 +19,6 @@ setup(name='IsobarImg',
       zip_safe=False,
       keywords='IsobarImg',
       install_requires=[
-          'Pillow'
+          'Pillow',
+          'opencv-contrib-python'
       ])

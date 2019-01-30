@@ -8,7 +8,7 @@
 #    o.save("test.png")
 
 import cv2
-from PIL import Image, ImageOps
+from PIL import Image, ImageOps, ImageEnhance
 
 def overlayImage(bg_fn, fg_fn):
     """overlay an transparent image
@@ -32,7 +32,7 @@ def denoiseImage(img_fn, d=5, sigma_color=30, sigma_space=30):
     """denoise an image
     
     Arguments:
-        img_fn {image} -- PIL image object
+        img_fn {str} -- image filename
     
     Keyword Arguments:
         d {int} -- diameter of each pixel neighborhood (default: {5}) 5,9
@@ -68,7 +68,7 @@ def aspectFit(img_fn, fillColor=(255,255,255), w=1080.0, h=1920.0):
     """scale the image to fit
     
     Arguments:
-        img_fn {image} -- PIL image object
+        img_fn {str} -- image filename
     
     Keyword Arguments:
         fillColor {tuple} -- fill color (default: {(255,255,255)})
@@ -81,3 +81,16 @@ def aspectFit(img_fn, fillColor=(255,255,255), w=1080.0, h=1920.0):
     img = Image.open(img_fn)
     s = getScale(img.size, w, h)
     return ImageOps.expand(img, (s[0],s[1],s[0],s[1]), fill=fillColor)
+
+def beautifyImage(img_fn):
+    """beautify the image
+    
+    Arguments:
+        img_fn {str} -- image filename
+    
+    Returns:
+        image -- PIL image object
+    """
+    img = denoiseImage(img_fn)
+    enhancer = ImageEnhance.Brightness(img)
+    return enhancer.enhance(1.1)

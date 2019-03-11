@@ -46,26 +46,8 @@ def denoiseImage(img_fn, d=5, sigma_color=30, sigma_space=30):
     out = cv2.bilateralFilter(img, d, sigma_color, sigma_space)
     return Image.fromarray(out[:,:,(2,1,0)])
 
-def getScale(size, w, h):
-    """calculate the scale of image
-    
-    Arguments:
-        size {tuple} -- image size
-        w {float} -- width
-        h {float} -- height
-    
-    Returns:
-        [type] -- [description]
-    """
-
-    scale = min(w/size[0], h/size[1])
-    if scale > 1.0:
-        return int((w-size[0])*0.5),int((h-size[1])*0.5)
-    else:
-        return int((w-size[0]*scale)*0.5),int((h-size[1]*scale)*0.5)
-
 def aspectFit(img_fn, fillColor=(255,255,255), w=1080.0, h=1920.0):
-    """scale the image to fit
+    """scale the image to fit this box
     
     Arguments:
         img_fn {str} -- image filename
@@ -79,8 +61,12 @@ def aspectFit(img_fn, fillColor=(255,255,255), w=1080.0, h=1920.0):
         image -- PIL image object
     """
     img = Image.open(img_fn)
-    s = getScale(img.size, w, h)
-    return ImageOps.expand(img, (s[0],s[1],s[0],s[1]), fill=fillColor)
+    iw = img.size[0]
+    ih = img.size[1]
+    scale = min(w/iw, h/ih)
+    reimg = img.resize((int(iw*scale),int(ih*scale)))
+    s = int((w-reimg.size[0])*0.5), int((h-reimg.size[1])*0.5)
+    return ImageOps.expand(reimg, (s[0],s[1],int(w-reimg.size[0]-s[0]),int(h-reimg.size[1]-s[1])), fill=fillColor)
 
 def beautifyImage(img_fn):
     """beautify the image

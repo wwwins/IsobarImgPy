@@ -46,7 +46,7 @@ def denoiseImage(img_fn, d=5, sigma_color=30, sigma_space=30):
     out = cv2.bilateralFilter(img, d, sigma_color, sigma_space)
     return Image.fromarray(out[:,:,(2,1,0)])
 
-def aspectFit(img_fn, fillColor=(255,255,255), w=1080.0, h=1920.0):
+def aspectFit(img_fn, fillColor=(255,255,255), size=(1080,1920)):
     """scale the image to fit this box
     
     Arguments:
@@ -54,8 +54,7 @@ def aspectFit(img_fn, fillColor=(255,255,255), w=1080.0, h=1920.0):
     
     Keyword Arguments:
         fillColor {tuple} -- fill color (default: {(255,255,255)})
-        w {float} -- width (default: {1080.0})
-        h {float} -- height (default: {1920.0})
+        size {tuple} -- width,height (default: {(1080,1920)})
     
     Returns:
         image -- PIL image object
@@ -63,6 +62,8 @@ def aspectFit(img_fn, fillColor=(255,255,255), w=1080.0, h=1920.0):
     img = Image.open(img_fn)
     iw = img.size[0]
     ih = img.size[1]
+    w = float(size[0])
+    h = float(size[1])
     scale = min(w/iw, h/ih)
     reimg = img.resize((int(iw*scale),int(ih*scale)))
     s = int((w-reimg.size[0])*0.5), int((h-reimg.size[1])*0.5)

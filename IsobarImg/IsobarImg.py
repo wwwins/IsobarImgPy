@@ -79,5 +79,4 @@ def beautifyImage(img_fn):
         image -- PIL image object
     """
     img = denoiseImage(img_fn)
-    enhancer = ImageEnhance.Brightness(img)
-    return enhancer.enhance(1.1)
+    return ImageEnhance.Brightness(ImageEnhance.Color(img).enhance(1.5)).enhance(1.1)

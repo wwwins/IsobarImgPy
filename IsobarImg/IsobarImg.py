@@ -69,14 +69,18 @@ def aspectFit(img_fn, fillColor=(255,255,255), size=(1080,1920)):
     s = int((w-reimg.size[0])*0.5), int((h-reimg.size[1])*0.5)
     return ImageOps.expand(reimg, (s[0],s[1],int(w-reimg.size[0]-s[0]),int(h-reimg.size[1]-s[1])), fill=fillColor)
 
-def beautifyImage(img_fn):
+def beautifyImage(img_fn, sat=1.1, bri=1.1):
     """beautify the image
     
     Arguments:
         img_fn {str} -- image filename
     
+    Keyword Arguments:
+        sat {float} -- saturation (default: {1.1})
+        bri {float} -- brightness (default: {1.1})
+    
     Returns:
-        image -- PIL image object
+        img -- PIL image object
     """
     img = denoiseImage(img_fn)
-    return ImageEnhance.Brightness(ImageEnhance.Color(img).enhance(1.5)).enhance(1.1)
+    return ImageEnhance.Brightness(ImageEnhance.Color(img).enhance(sat)).enhance(bri)
